@@ -1,0 +1,134 @@
+version: '3'
+name: ${COMPOSE_PROJECT_NAME}
+
+volumes:  # The `name` will be added at the beginning ov volumes names
+  postgres_data: {}
+  postgres_data_backups: {}
+  django_media: {}
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: ./compose/production/django/Dockerfile
+    image: ${COMPOSE_PROJECT_NAME}_production_django
+    restart: unless-stopped
+    volumes:
+      - django_media:/app/backend/media
+    depends_on:
+      - postgres
+      - redis
+    env_file: .env
+    command: /start
+    expose:
+      - 5000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=global"
+      - "traefik.http.routers.django.priority=10"
+      - "traefik.http.routers.django.rule=(Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)) && (PathPrefix(`/api`) || PathPrefix(`/${DJANGO_ADMIN_URL}`) || PathPrefix(`/static`))"
+      - "traefik.http.routers.django.entrypoints=websecure"
+      - "traefik.http.routers.django.tls=true"
+      - "traefik.http.routers.django.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.django.middlewares=security-headers@file,compression@file"
+      - "traefik.http.routers.django.tls.options=default"
+      - "traefik.http.services.django.loadbalancer.server.port=5000"
+    networks:
+      - global
+      - back
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: ${COMPOSE_PROJECT_NAME}_production_postgres
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_backups:/backups
+    env_file: .env
+    labels:
+      - traefik.enable=false
+    networks:
+      - back
+
+  redis:
+    image: redis:6
+    restart: unless-stopped
+    labels:
+      - traefik.enable=false
+    networks:
+      - back
+
+  celeryworker:
+    <<: *django
+    image: ${COMPOSE_PROJECT_NAME}_production_celeryworker
+    command: /start-celeryworker
+    restart: unless-stopped
+    labels:
+      - traefik.enable=false
+    networks:
+      - back
+
+  celerybeat:
+    <<: *django
+    image: ${COMPOSE_PROJECT_NAME}_production_celerybeat
+    command: /start-celerybeat
+    restart: unless-stopped
+    labels:
+      - traefik.enable=false
+    networks:
+      - back
+
+  flower:
+    <<: *django
+    image: ${COMPOSE_PROJECT_NAME}_production_flower
+    command: /start-flower
+    restart: unless-stopped
+    expose:
+      - 5555
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=global"
+      - "traefik.http.routers.flower.rule=(Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`))"
+      - "traefik.http.routers.flower.entrypoints=flower"
+      - "traefik.http.routers.flower.tls=true"
+      - "traefik.http.routers.flower.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.flower.middlewares=security-headers@file"
+      - "traefik.http.routers.flower.tls.options=default"
+      - "traefik.http.services.flower.loadbalancer.server.port=5555"
+    networks:
+      - global
+      - back
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./compose/production/nginx/Dockerfile
+    image: ${COMPOSE_PROJECT_NAME}_nginx
+    restart: unless-stopped
+    depends_on:
+      - django
+    volumes:
+      - django_media:/usr/share/nginx/media:ro
+    expose:
+      - 80
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=global"
+      - "traefik.http.routers.nginx.priority=70"
+      - "traefik.http.routers.nginx.rule=(Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)) && PathPrefix(`/media`)"
+      - "traefik.http.routers.nginx.entrypoints=websecure"
+      - "traefik.http.routers.nginx.tls=true"
+      - "traefik.http.routers.nginx.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.nginx.middlewares=security-headers@file,compression@file"
+      - "traefik.http.routers.nginx.tls.options=default"
+      - "traefik.http.services.nginx.loadbalancer.server.port=80"
+    networks:
+      - global
+
+networks:
+  global:
+    external: true
+  back:
+    name: back

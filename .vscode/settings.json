@@ -1,0 +1,15 @@
+{
+  "python.formatting.provider": "black",
+  "editor.formatOnSave": true,
+  "editor.rulers": [
+    119
+  ],
+  "mypy-type-checker.importStrategy": "fromEnvironment",
+  "mypy-type-checker.interpreter": [
+    "${workspaceFolder}/venv/bin/python"
+  ],
+  "mypy-type-checker.args": [
+    "--follow-imports=skip",
+    "--config-file=${workspaceFolder}/pyproject.toml"
+  ],
+}
