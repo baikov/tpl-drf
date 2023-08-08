@@ -7,12 +7,6 @@ User = get_user_model()
 
 
 class CustomUserDetailsSerializer(serializers.ModelSerializer[UserType]):
-    emails = serializers.SerializerMethodField()
-
-    def get_emails(self, obj: User) -> list[str]:
-        print(obj._meta.fields)
-        return obj.emailaddress_set.all().values_list("email", flat=True)
-
     class Meta:
         model = User
         fields = (

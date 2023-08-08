@@ -19,4 +19,8 @@
     "--follow-imports=skip",
     "--config-file=${workspaceFolder}/pyproject.toml"
   ],
+  "mypy.dmypyExecutable": "${workspaceFolder}/venv/bin/dmypy",
+  "mypy.runUsingActiveInterpreter": true,
+  "python.linting.pylintEnabled": true,
+  "python.linting.enabled": true,
 }
