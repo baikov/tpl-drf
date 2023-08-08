@@ -1,7 +1,8 @@
 version: '3'
 name: ${COMPOSE_PROJECT_NAME}
 
-volumes:  # The `name` will be added at the beginning ov volumes names
+# The `name` will be added at the beginning ov volumes names
+volumes:
   postgres_data: {}
   postgres_data_backups: {}
   django_media: {}
@@ -25,7 +26,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=global"
-      - "traefik.http.routers.django.priority=10"
+      - "traefik.http.routers.django.priority=80"
       - "traefik.http.routers.django.rule=(Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)) && (PathPrefix(`/api`) || PathPrefix(`/${DJANGO_ADMIN_URL}`) || PathPrefix(`/static`))"
       - "traefik.http.routers.django.entrypoints=websecure"
       - "traefik.http.routers.django.tls=true"
@@ -116,7 +117,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=global"
-      - "traefik.http.routers.nginx.priority=70"
+      - "traefik.http.routers.nginx.priority=90"
       - "traefik.http.routers.nginx.rule=(Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)) && PathPrefix(`/media`)"
       - "traefik.http.routers.nginx.entrypoints=websecure"
       - "traefik.http.routers.nginx.tls=true"

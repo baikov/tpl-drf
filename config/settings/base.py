@@ -118,7 +118,9 @@ PASSWORD_HASHERS = [
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"  # noqa: E501
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -234,7 +236,7 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s",
+            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s",  # noqa: E501
         },
     },
     "handlers": {
@@ -318,16 +320,16 @@ DJOSER = {
         "activation": "djoser.serializers.ActivationSerializer",
         "password_reset": "djoser.serializers.SendEmailResetSerializer",
         "password_reset_confirm": "djoser.serializers.PasswordResetConfirmSerializer",
-        "password_reset_confirm_retype": "djoser.serializers.PasswordResetConfirmRetypeSerializer",
+        "password_reset_confirm_retype": "djoser.serializers.PasswordResetConfirmRetypeSerializer",  # noqa: E501
         "set_password": "djoser.serializers.SetPasswordSerializer",
         "set_password_retype": "djoser.serializers.SetPasswordRetypeSerializer",
         "set_username": "djoser.serializers.SetUsernameSerializer",
         "set_username_retype": "djoser.serializers.SetUsernameRetypeSerializer",
         "username_reset": "djoser.serializers.SendEmailResetSerializer",
         "username_reset_confirm": "djoser.serializers.UsernameResetConfirmSerializer",
-        "username_reset_confirm_retype": "djoser.serializers.UsernameResetConfirmRetypeSerializer",
+        "username_reset_confirm_retype": "djoser.serializers.UsernameResetConfirmRetypeSerializer",  # noqa: E501
         "user_create": "djoser.serializers.UserCreateSerializer",
-        "user_create_password_retype": "djoser.serializers.UserCreatePasswordRetypeSerializer",
+        "user_create_password_retype": "djoser.serializers.UserCreatePasswordRetypeSerializer",  # noqa: E501
         "user_delete": "djoser.serializers.UserDeleteSerializer",
         "user": "djoser.serializers.UserSerializer",
         "current_user": "djoser.serializers.UserSerializer",
@@ -338,8 +340,8 @@ DJOSER = {
         "activation": "djoser.email.ActivationEmail",
         "confirmation": "djoser.email.ConfirmationEmail",
         "password_reset": "djoser.email.PasswordResetEmail",
-        "password_changed_confirmation": "djoser.email.PasswordChangedConfirmationEmail",
-        "username_changed_confirmation": "djoser.email.UsernameChangedConfirmationEmail",
+        "password_changed_confirmation": "djoser.email.PasswordChangedConfirmationEmail",  # noqa: E501
+        "username_changed_confirmation": "djoser.email.UsernameChangedConfirmationEmail",  # noqa: E501
         "username_reset": "djoser.email.UsernameResetEmail",
     },
 }
@@ -348,8 +350,9 @@ DJOSER = {
 CORS_URLS_REGEX = r"^/api/.*$"
 
 
-# By Default swagger ui is available only to admin user(s). You can change permission classes to change that
-# See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
+# By Default swagger ui is available only to admin user(s). You can change permission
+# classes to change that. See more configuration options at
+# https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
 SPECTACULAR_SETTINGS = {
     "TITLE": f"{env.str('COMPOSE_PROJECT_NAME', 'Backend')} API",
     "DESCRIPTION": f"Documentation of API endpoints of {DOMAIN}",

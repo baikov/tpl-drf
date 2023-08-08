@@ -1,0 +1,67 @@
+version: '3.9'
+
+services:
+  django:
+    ports: !reset []
+    expose:
+      - 8000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=dev-proxy"
+      - "traefik.http.routers.django.rule=(Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)) && (PathPrefix(`/api`) || PathPrefix(`/${DJANGO_ADMIN_URL}`) || PathPrefix(`/static`) || PathPrefix(`/silk`))"
+      - "traefik.http.routers.django.priority=80"
+      - "traefik.http.routers.django.entrypoints=web"
+      - "traefik.http.routers.django.tls=false"
+      - "traefik.http.routers.django.middlewares=compression@file"
+      - "traefik.http.services.django.loadbalancer.server.port=8000"
+    networks:
+      - dev-proxy
+
+  mailhog:
+    ports: !reset []
+    expose:
+      - 8025
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=dev-proxy"
+      - "traefik.http.routers.mailhog.rule=(Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`))"
+      - "traefik.http.routers.mailhog.entrypoints=mailhog"
+      - "traefik.http.routers.mailhog.tls=false"
+      - "traefik.http.routers.mailhog.middlewares=compression@file"
+      - "traefik.http.services.mailhog.loadbalancer.server.port=8025"
+    networks:
+      - dev-proxy
+
+  flower:
+    ports: !reset []
+    expose:
+      - 5555
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=dev-proxy"
+      - "traefik.http.routers.flower.rule=(Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`))"
+      - "traefik.http.routers.flower.entrypoints=flower"
+      - "traefik.http.routers.flower.tls=false"
+      - "traefik.http.routers.flower.middlewares=compression@file"
+      - "traefik.http.services.flower.loadbalancer.server.port=5555"
+    networks:
+      - dev-proxy
+
+  # docs:
+  #   ports: !reset []
+  #   expose:
+  #     - 9000
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.docker.network=dev-proxy"
+  #     - "traefik.http.routers.flower.rule=(Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`))"
+  #     - "traefik.http.routers.flower.entrypoints=docs"
+  #     - "traefik.http.routers.flower.tls=false"
+  #     - "traefik.http.routers.flower.middlewares=compression@file"
+  #     - "traefik.http.services.flower.loadbalancer.server.port=9000"
+  #   networks:
+  #     - dev-proxy
+
+networks:
+  dev-proxy:
+    external: true

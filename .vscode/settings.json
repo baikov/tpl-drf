@@ -1,9 +1,16 @@
 {
-  "python.formatting.provider": "black",
-  "editor.formatOnSave": true,
-  "editor.rulers": [
-    119
-  ],
+  "[python]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true,
+      "source.organizeImports": true,
+      // "source.fixAll.ruff": true,
+      // "source.organizeImports.ruff": true,
+    },
+    "editor.rulers": [
+      88
+    ],
+  },
   "mypy-type-checker.importStrategy": "fromEnvironment",
   "mypy-type-checker.interpreter": [
     "${workspaceFolder}/venv/bin/python"

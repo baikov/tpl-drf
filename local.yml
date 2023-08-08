@@ -2,7 +2,7 @@ version: '3.9'
 name: ${COMPOSE_PROJECT_NAME}
 
 volumes:
-  local_postgres_data: {}
+  postgres_data: {}
 
 services:
   django: &django
@@ -18,82 +18,60 @@ services:
       - mailhog
     volumes:
       - .:/app:z
-    env_file: .env.local
-    expose:
-      - '8000'
+    env_file:
+      - .env
+      - .env.local
+    ports:
+      - '${DJANGO_DOCKER_PORT}:8000'
     command: /start
     labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=dev-proxy"
-      - "traefik.http.routers.django.rule=(Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)) && (PathPrefix(`/api`) || PathPrefix(`/${DJANGO_ADMIN_URL}`) || PathPrefix(`/static`) || PathPrefix(`/silk`))"
-      - "traefik.http.routers.django.priority=80"
-      - "traefik.http.routers.django.entrypoints=websecure"
-      - "traefik.http.routers.django.tls=true"
-      - "traefik.http.routers.django.middlewares=security-headers@file,compression@file"
-      - "traefik.http.services.django.loadbalancer.server.port=8000"
+      - traefik.enable=false
     networks:
-      - dev-proxy
       - backend
 
   postgres:
     build:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
-    image: ${COMPOSE_PROJECT_NAME}_production_postgres
-    container_name: ${COMPOSE_PROJECT_NAME}_local_postgres
+    image: ${COMPOSE_PROJECT_NAME}_postgres
+    container_name: ${COMPOSE_PROJECT_NAME}_postgres
     restart: unless-stopped
     volumes:
-      - local_postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
       - ./pg-backups:/backups:z
-    env_file: .env.local
+    env_file:
+      - .env
+      - .env.local
     ports:
-      - '5488:5432'
-    # expose:
-    #   - '5432'
-    # labels:
-    #   - "traefik.enable=true"
-    #   - "traefik.docker.network=dev-proxy"
-    #   # - "traefik.tcp.routers.postgres.rule=HostSNI(`*`)"
-    #   # - "traefik.tcp.routers.postgres.tls=false"
-    #   # - "traefik.tcp.routers.postgres.tls.options=default"
-    #   - "traefik.tcp.routers.postgres.rule=HostSNI(`${DOMAIN}`)"
-    #   - "traefik.tcp.routers.postgres.entrypoints=postgres"
-    #   - "traefik.tcp.routers.postgres.service=postgres@docker"
-    #   - "traefik.tcp.routers.postgres.tls=true"
-    #   - "traefik.tcp.services.postgres.loadBalancer.server.port=5432"
+      - '${POSTGRES_DOCKER_PORT}:5432'
+    labels:
+      - traefik.enable=false
     networks:
-      # - dev-proxy
       - backend
 
   mailhog:
     image: mailhog/mailhog:v1.0.0
-    container_name: ${COMPOSE_PROJECT_NAME}_local_mailhog
+    container_name: ${COMPOSE_PROJECT_NAME}_mailhog
     restart: unless-stopped
-    expose:
-      - 8025
+    ports:
+      - '${MAILHOG_DOCKER_PORT}:8025'
     labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=dev-proxy"
-      - "traefik.http.routers.mailhog.rule=(Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`))"
-      - "traefik.http.routers.mailhog.entrypoints=mailhog"
-      - "traefik.http.routers.mailhog.tls=true"
-      - "traefik.http.services.mailhog.loadbalancer.server.port=8025"
+      - traefik.enable=false
     networks:
-      - dev-proxy
       - backend
 
   redis:
     image: redis:6
-    container_name: ${COMPOSE_PROJECT_NAME}_local_redis
-    networks:
-      - backend
+    container_name: ${COMPOSE_PROJECT_NAME}_redis
     labels:
       - traefik.enable=false
+    networks:
+      - backend
 
   celeryworker:
     <<: *django
-    image: ${COMPOSE_PROJECT_NAME}_local_celeryworker
-    container_name: ${COMPOSE_PROJECT_NAME}_local_celeryworker
+    image: ${COMPOSE_PROJECT_NAME}_celeryworker
+    container_name: ${COMPOSE_PROJECT_NAME}_celeryworker
     depends_on:
       - redis
       - postgres
@@ -107,8 +85,8 @@ services:
 
   celerybeat:
     <<: *django
-    image: ${COMPOSE_PROJECT_NAME}_local_celerybeat
-    container_name: ${COMPOSE_PROJECT_NAME}_local_celerybeat
+    image: ${COMPOSE_PROJECT_NAME}_celerybeat
+    container_name: ${COMPOSE_PROJECT_NAME}_celerybeat
     depends_on:
       - redis
       - postgres
@@ -122,42 +100,34 @@ services:
 
   flower:
     <<: *django
-    image: ${COMPOSE_PROJECT_NAME}_local_flower
-    container_name: ${COMPOSE_PROJECT_NAME}_local_flower
-    expose:
-      - '5555'
-    command: /start-flower
+    image: ${COMPOSE_PROJECT_NAME}_flower
+    container_name: ${COMPOSE_PROJECT_NAME}_flower
     restart: unless-stopped
+    ports:
+      - '${FLOWER_DOCKER_PORT}:5555'
+    command: /start-flower
     labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=dev-proxy"
-      - "traefik.http.routers.flower.rule=Host(`${DOMAIN}`)"
-      - "traefik.http.routers.flower.entrypoints=flower"
-      - "traefik.http.routers.flower.tls=true"
-      - "traefik.http.routers.flower.middlewares=security-headers@file"
-      - "traefik.http.services.flower.loadbalancer.server.port=5555"
+      - traefik.enable=false
     networks:
-      - dev-proxy
       - backend
 
   # docs:
-  #   image: ${COMPOSE_PROJECT_NAME}_local_docs
-  #   container_name: ${COMPOSE_PROJECT_NAME}_local_docs
+  #   image: ${COMPOSE_PROJECT_NAME}_docs
+  #   container_name: ${COMPOSE_PROJECT_NAME}_docs
   #   build:
   #     context: .
   #     dockerfile: ./compose/local/docs/Dockerfile
   #   env_file:
-  #     - ./.env.locals/.local/.django
+  #     - .env
+  #     - .env.local
   #   volumes:
-  #     - ./docs:/docs:z
-  #     - ./config:/app/config:z
-  #     - ./backend:/app/backend:z
+  #     - ./backend/docs:/docs:z
+  #     - ./backend/config:/app/config:z
+  #     - ./backend/backend:/app/backend:z
   #   ports:
-  #     - '9000:9000'
+  #     - '${DOCS_DOCKER_PORT}:9000'
   #   command: /start-docs
 
 networks:
-  dev-proxy:
-    external: true
   backend:
     name: backend
