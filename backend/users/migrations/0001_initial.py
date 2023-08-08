@@ -7,7 +7,6 @@ import backend.users.models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -41,7 +40,8 @@ class Migration(migrations.Migration):
                         help_text="Designates that this user has all permissions without explicitly assigning them.",
                         verbose_name="superuser status",
                     ),
-                ),(
+                ),
+                (
                     "username",
                     models.CharField(
                         error_messages={
