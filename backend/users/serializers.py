@@ -14,6 +14,5 @@ class CustomUserDetailsSerializer(serializers.ModelSerializer[UserType]):
             "username",
             "email",
             "name",
-            "emails",
         )
         read_only_fields = ("pk", "email")
