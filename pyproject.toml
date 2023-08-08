@@ -10,7 +10,6 @@ exclude = [
     "venv",
     ".venv",
 ]
-# src = ["backend"]
 
 [tool.ruff.isort]
 known-first-party = ["backend", "config"]
@@ -32,16 +31,6 @@ plugins = ["django_coverage_plugin"]
 [tool.black]
 # line-length = 88
 target-version = ['py311']
-
-
-# ==== isort ====
-[tool.isort]
-profile = "black"
-line_length = 88
-known_first_party = ["backend", "config"]
-skip = ["venv/"]
-skip_glob = ["**/migrations/*.py"]
-
 
 # ==== mypy ====
 [tool.mypy]
