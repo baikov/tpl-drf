@@ -276,3 +276,6 @@ backend/media/
 
 .pytest_cache/
 .ipython/
+
+# Local env files
+.env
