@@ -18,8 +18,7 @@ services:
       - POSTGRES_DB=ci
       - POSTGRES_USER=ci_user
       - POSTGRES_PASSWORD=12345678
-    ports:
-      - '8000:8000'
+      - DJANGO_DOCKER_PORT=8000
 
   postgres:
     image: ci_postgres
@@ -31,18 +30,17 @@ services:
       - POSTGRES_DB=ci
       - POSTGRES_USER=ci_user
       - POSTGRES_PASSWORD=12345678
+      - POSTGRES_DOCKER_PORT=5432
     volumes:
       - ci_postgres_data:/var/lib/postgresql/data
       - ci_postgres_data_backups:/backups:z
-    ports:
-      - '5432:5432'
 
   mailhog:
     image: mailhog/mailhog:v1.0.0
     container_name: ci_mailhog
     env_file: !reset []
-    ports:
-      - '8025:8025'
+    environment:
+      - MAILHOG_DOCKER_PORT=8025
 
   redis:
     container_name: ci_redis
@@ -62,12 +60,12 @@ services:
     image: ci_flower
     container_name: ci_flower
     env_file: !reset []
-    ports:
-      - '5555:5555'
+    environment:
+      - FLOWER_DOCKER_PORT=5555
 
   # docs:
   #   image: ci_docs
   #   container_name: ci_docs
   #   env_file: !reset []
-  #   ports:
-  #     - '9000:9000'
+  #   environment:
+  #     - DOCS_DOCKER_PORT=9000
