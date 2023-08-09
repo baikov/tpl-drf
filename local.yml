@@ -20,7 +20,7 @@ services:
     volumes:
       - .:/app:z
     ports:
-      - '${DJANGO_DOCKER_PORT}:8000'
+      - '${DJANGO_DOCKER_PORT:-8000}:8000'
     command: /start
     labels:
       - traefik.enable=false
@@ -39,7 +39,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./pg-backups:/backups:z
     ports:
-      - '${POSTGRES_DOCKER_PORT}:5432'
+      - '${POSTGRES_DOCKER_PORT:-5432}:5432'
     labels:
       - traefik.enable=false
     networks:
@@ -51,7 +51,7 @@ services:
     restart: unless-stopped
     env_file: .env
     ports:
-      - '${MAILHOG_DOCKER_PORT}:8025'
+      - '${MAILHOG_DOCKER_PORT:-8025}:8025'
     labels:
       - traefik.enable=false
     networks:
@@ -104,7 +104,7 @@ services:
     restart: unless-stopped
     env_file: .env
     ports:
-      - '${FLOWER_DOCKER_PORT}:5555'
+      - '${FLOWER_DOCKER_PORT:-5555}:5555'
     command: /start-flower
     labels:
       - traefik.enable=false
@@ -124,7 +124,7 @@ services:
   #     - ./backend/config:/app/config:z
   #     - ./backend/backend:/app/backend:z
   #   ports:
-  #     - '${DOCS_DOCKER_PORT}:9000'
+  #     - '${DOCS_DOCKER_PORT:-9000}:9000'
   #   command: /start-docs
 
 networks:
