@@ -33,20 +33,20 @@ Choose one of `.env` presets.
 1. No need for a Traefik container
 1. Rename `.env.example` to `.env`
 1. Set `uniqe` project name
-  ```env
-  COMPOSE_PROJECT_NAME=uniqe_name
-  ```
+    ```env
+    COMPOSE_PROJECT_NAME=uniqe_name
+    ```
 1. Uncomment `Mode 0` block and set custom ports if needed:
-  ```env
-  # Mode 0: As separate dev server on custom port
-  COMPOSE_FILE=local.yml
-  DOMAIN=localhost
-  DJANGO_DOCKER_PORT=8000
-  POSTGRES_DOCKER_PORT=5497
-  MAILHOG_DOCKER_PORT=8025
-  FLOWER_DOCKER_PORT=5555
-  DOCS_DOCKER_PORT=9000
-  ```
+    ```env
+    # Mode 0: As separate dev server on custom port
+    COMPOSE_FILE=local.yml
+    DOMAIN=localhost
+    DJANGO_DOCKER_PORT=8000
+    POSTGRES_DOCKER_PORT=5497
+    MAILHOG_DOCKER_PORT=8025
+    FLOWER_DOCKER_PORT=5555
+    DOCS_DOCKER_PORT=9000
+    ```
 1. Run `docker compose build` and `docker compose up -d`
 
 ### Mode 1: As dev server behind the Traefik with http
@@ -56,15 +56,15 @@ Choose one of `.env` presets.
 1. The Traefik container must be running in `Mode 1`
 1. Rename `.env.example` to `.env`
 1. Set the project name same as `COMPOSE_PROJECT_NAME` in Traefik `.env`
-  ```env
-  COMPOSE_PROJECT_NAME=example
-  ```
+    ```env
+    COMPOSE_PROJECT_NAME=example
+    ```
 1. Uncomment `Mode 1` block:
-  ```env
-  # Mode 1: As dev server behind the Traefik with http
-  COMPOSE_FILE=local.yml:local.traefik.yml
-  DOMAIN=localhost  # or another aliace for 127.0.0.1 declared in etc/hosts, but same as DOMAIN in Traefik .env!
-  ```
+    ```env
+    # Mode 1: As dev server behind the Traefik with http
+    COMPOSE_FILE=local.yml:local.traefik.yml
+    DOMAIN=localhost  # or another aliace for 127.0.0.1 declared in etc/hosts, but same as DOMAIN in Traefik .env!
+    ```
 1. Run Traefik container, then run Django stack with `docker compose build` and `docker compose up -d`
 
 ### Mode 2: As dev server behind the Traefik + SSL and custom domain
@@ -74,49 +74,48 @@ Choose one of `.env` presets.
 1. The Traefik container must be running in `Mode 2`
 1. Rename `.env.example` to `.env`
 1. Set the project name same as `COMPOSE_PROJECT_NAME` in Traefik `.env`
-  ```env
-  COMPOSE_PROJECT_NAME=example
-  ```
+    ```env
+    COMPOSE_PROJECT_NAME=example
+    ```
 1. Uncomment `Mode 2` block:
-  ```env
-  # Mode 2: As dev server behind the Traefik + SSL and custom domain
-  COMPOSE_FILE=local.yml:local.traefik.yml:local.traefik.ssl.yml
-  DOMAIN=tpl.local  # same as DOMAIN in Traefik .env!
+    ```env
+    # Mode 2: As dev server behind the Traefik + SSL and custom domain
+    COMPOSE_FILE=local.yml:local.traefik.yml:local.traefik.ssl.yml
+    DOMAIN=tpl.local  # same as DOMAIN in Traefik .env!
     ```
 1. Run Traefik container, then run Django stack with `docker compose build` and `docker compose up -d`
 
 ### Usefull commands from django-cookiecutter
 
 1. Show Logs (e.g. Django)
-  ```shell
-  docker logs -f django
-  # or
-  docker compose logs -f django
-  ```
+    ```shell
+    docker logs -f django
+    # or
+    docker compose logs -f django
+    ```
 1. Migrations
-  ```shell
-  docker compose run --rm django python manage.py makemigrations
-  ```
-  ```shell
-  docker compose run --rm django python manage.py migrate
-  ```
+    ```shell
+    docker compose run --rm django python manage.py makemigrations
+    ```
+    ```shell
+    docker compose run --rm django python manage.py migrate
+    ```
 1. Django shell_plus with ipython
-  ```shell
-  docker compose run --rm --name django_shell django python manage.py shell_plus --ipython
-  ```
+    ```shell
+    docker compose run --rm --name django_shell django python manage.py shell_plus --ipython
+    ```
 1. Create DB backup (placed in `./pg-backups`)
-  ```shell
-  docker compose exec postgres backup
-  ```
+    ```shell
+    docker compose exec postgres backup
+    ```
 1. Show backups list
-  ```shell
-  docker compose exec postgres backups
-  ```
+    ```shell
+    docker compose exec postgres backups
+    ```
 1. Restore backup (only from `gzip`)
-  ```shell
-  docker compose exec postgres restore backup_2023_05_26T12_34_08.sql.gz
-  ```
-
+    ```shell
+    docker compose exec postgres restore backup_2023_05_26T12_34_08.sql.gz
+    ```
 
 ## Deploy to production
 
@@ -127,15 +126,15 @@ Choose one of `.env` presets.
 1. The Traefik container must be running in `Mode 3` on prod server
 1. Rename `.env.production.example` to `.env`
 1. Set the project name same as `COMPOSE_PROJECT_NAME` in Traefik `.env`
-  ```env
-  COMPOSE_PROJECT_NAME=example
-  ```
+    ```env
+    COMPOSE_PROJECT_NAME=example
+    ```
 1. Uncomment `Mode 3` block:
-  ```env
-  # Mode 3: For production with SSR
-  COMPOSE_FILE=production.yml
-  DOMAIN=your-domain.com
-  ```
+    ```env
+    # Mode 3: For production with SSR
+    COMPOSE_FILE=production.yml
+    DOMAIN=your-domain.com
+    ```
 1. Change all secure variables
 1. Add Sentry DSN and Email settings (optional)
 1. Run container with `docker compose build` and `docker compose up -d`
