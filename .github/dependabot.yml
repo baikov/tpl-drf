@@ -41,20 +41,6 @@ updates:
           - 'version-update:semver-minor'
 
   - package-ecosystem: 'docker'
-    # Look for a `Dockerfile` in the `compose/local/node` directory
-    directory: 'compose/local/node/'
-    # Every weekday
-    schedule:
-      interval: 'daily'
-
-  - package-ecosystem: 'docker'
-    # Look for a `Dockerfile` in the `compose/production/aws` directory
-    directory: 'compose/production/aws/'
-    # Every weekday
-    schedule:
-      interval: 'daily'
-
-  - package-ecosystem: 'docker'
     # Look for a `Dockerfile` in the `compose/production/django` directory
     directory: 'compose/production/django/'
     # Every weekday
@@ -70,13 +56,6 @@ updates:
   - package-ecosystem: 'docker'
     # Look for a `Dockerfile` in the `compose/production/postgres` directory
     directory: 'compose/production/postgres/'
-    # Every weekday
-    schedule:
-      interval: 'daily'
-
-  - package-ecosystem: 'docker'
-    # Look for a `Dockerfile` in the `compose/production/traefik` directory
-    directory: 'compose/production/traefik/'
     # Every weekday
     schedule:
       interval: 'daily'
