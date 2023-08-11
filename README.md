@@ -42,7 +42,6 @@ Choose one of `.env` presets.
     COMPOSE_FILE=local.yml
     DOMAIN=localhost
     DJANGO_DOCKER_PORT=8000
-    POSTGRES_DOCKER_PORT=5497
     MAILHOG_DOCKER_PORT=8025
     FLOWER_DOCKER_PORT=5555
     DOCS_DOCKER_PORT=9000
@@ -62,6 +61,7 @@ Choose one of `.env` presets.
 1. Uncomment `Mode 1` block:
     ```env
     # Mode 1: As dev server behind the Traefik with http
+    # For Windows users: use `;` (semicolon) as separator - local.yml;local.traefik.yml
     COMPOSE_FILE=local.yml:local.traefik.yml
     DOMAIN=localhost  # or another aliace for 127.0.0.1 declared in etc/hosts, but same as DOMAIN in Traefik .env!
     ```
@@ -80,6 +80,7 @@ Choose one of `.env` presets.
 1. Uncomment `Mode 2` block:
     ```env
     # Mode 2: As dev server behind the Traefik + SSL and custom domain
+    # For Windows users: use `;` (semicolon) as separator - local.yml;local.traefik.yml;local.traefik.ssl.yml
     COMPOSE_FILE=local.yml:local.traefik.yml:local.traefik.ssl.yml
     DOMAIN=tpl.local  # same as DOMAIN in Traefik .env!
     ```
@@ -115,6 +116,10 @@ Choose one of `.env` presets.
 1. Restore backup (only from `gzip`)
     ```shell
     docker compose exec postgres restore backup_2023_05_26T12_34_08.sql.gz
+    ```
+1. Hot clean DB (close all connections)
+    ```shell
+    docker compose exec postgres restore clean
     ```
 
 ## Deploy to production
