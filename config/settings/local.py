@@ -37,6 +37,25 @@ CACHES = {
 EMAIL_HOST = env("EMAIL_HOST", default="mailhog")
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-port
 EMAIL_PORT = 1025
+EMAIL_PRODUCTION = env.bool("EMAIL_PRODUCTION", default=False)
+
+if EMAIL_PRODUCTION:
+    DEFAULT_FROM_EMAIL = env(
+        "DJANGO_DEFAULT_FROM_EMAIL",
+        default="backend <noreply@example.com>",
+    )
+    SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
+    EMAIL_SUBJECT_PREFIX = env(
+        "DJANGO_EMAIL_SUBJECT_PREFIX",
+        default="[backend] ",
+    )
+    EMAIL_HOST = env("DJANGO_EMAIL_HOST", default="")
+    EMAIL_PORT = env("DJANGO_EMAIL_PORT", default="")
+    EMAIL_HOST_USER = env("DJANGO_EMAIL_HOST_USER", default="")
+    EMAIL_HOST_PASSWORD = env("DJANGO_EMAIL_HOST_PASSWORD", default="")
+    EMAIL_USE_TLS = env.bool("DJANGO_EMAIL_USE_TLS", default=False)
+    EMAIL_USE_SSL = env.bool("DJANGO_EMAIL_USE_SSL", default=False)
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 # WhiteNoise
 # ------------------------------------------------------------------------------

@@ -5,6 +5,8 @@ from django.urls import include, path
 from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
+from backend.users.views import MailView
+
 urlpatterns = [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     # Django Admin, use {% url 'admin:index' %}
@@ -21,6 +23,7 @@ urlpatterns += [
         SpectacularSwaggerView.as_view(url_name="api-schema"),
         name="api-docs",
     ),
+    path("api/test-mail/", MailView.as_view(), name="mail"),
     path("api/auth/", include("djoser.urls")),
     path("api/auth/", include("djoser.urls.jwt")),
 ]
