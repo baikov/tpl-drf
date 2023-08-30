@@ -24,6 +24,35 @@ Other parts:
 
 ## Local development
 
+### Preparation
+
+1. Create virtual environment
+    ```shell
+    python -m venv venv
+    ```
+1. Activate virtual environment
+    ```shell
+    source venv/bin/activate
+    ```
+1. Install requirements
+    ```shell
+    pip install -r requirements/local.txt
+    ```
+1. Install and activate all recomended `VSCode` extensions
+1. Install `pre-commit`
+    ```shell
+    pre-commit install
+    ```
+1. Install `Docker Desktop`
+1. Make sure `ruff` and `mypy` are working
+    ```shell
+    ruff check backend/
+    ```
+    ```shell
+    mypy backend/
+    ```
+1. Copy `.env.example` and rename it to `.env` on local machine
+
 Choose one of `.env` presets.
 
 > To use `Mode 1` and `Mode 2`, a raised container from [this repo](https://github.com/baikov/tpl-traefik) with Traefik is required. Because an external network to which frontend and backend containers are connected is created in Traefik compose.
@@ -31,7 +60,6 @@ Choose one of `.env` presets.
 ### Mode 0: As separate dev server on custom port
 
 1. No need for a Traefik container
-1. Rename `.env.example` to `.env`
 1. Set `uniqe` project name
     ```env
     COMPOSE_PROJECT_NAME=uniqe_name
@@ -53,7 +81,6 @@ Choose one of `.env` presets.
 > Avaliable paths: `dj-admin/`, `api/`, `ststic/`, `silk/`. Other paths are proxied to the frontend container
 
 1. The Traefik container must be running in `Mode 1`
-1. Rename `.env.example` to `.env`
 1. Set the project name same as `COMPOSE_PROJECT_NAME` in Traefik `.env`
     ```env
     COMPOSE_PROJECT_NAME=example
@@ -72,7 +99,6 @@ Choose one of `.env` presets.
 > Avaliable paths: `dj-admin/`, `api/`, `ststic/`, `silk/`. Other paths are proxied to the frontend container
 
 1. The Traefik container must be running in `Mode 2`
-1. Rename `.env.example` to `.env`
 1. Set the project name same as `COMPOSE_PROJECT_NAME` in Traefik `.env`
     ```env
     COMPOSE_PROJECT_NAME=example
@@ -129,7 +155,7 @@ Choose one of `.env` presets.
 ### Mode 3: when front in SSR mode
 
 1. The Traefik container must be running in `Mode 3` on prod server
-1. Rename `.env.production.example` to `.env`
+1. Copy `.env.production.example` and rename it to `.env`
 1. Set the project name same as `COMPOSE_PROJECT_NAME` in Traefik `.env`
     ```env
     COMPOSE_PROJECT_NAME=example
