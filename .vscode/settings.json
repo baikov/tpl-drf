@@ -4,8 +4,6 @@
     "editor.codeActionsOnSave": {
       "source.fixAll": true,
       "source.organizeImports": true,
-      // "source.fixAll.ruff": true,
-      // "source.organizeImports.ruff": true,
     },
     "editor.rulers": [
       88

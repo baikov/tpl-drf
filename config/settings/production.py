@@ -63,6 +63,9 @@ SECURE_CONTENT_TYPE_NOSNIFF = env.bool(
 # STATIC
 # ------------------------
 STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },

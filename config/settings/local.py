@@ -71,7 +71,7 @@ INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS  # noqa: F40
 # django-extensions
 # ------------------------------------------------------------------------------
 # https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
-INSTALLED_APPS += ["django_extensions"]  # noqa: F405
+# INSTALLED_APPS += ["django_extensions"]  # noqa: F405
 # Celery
 # ------------------------------------------------------------------------------
 
@@ -81,9 +81,14 @@ CELERY_TASK_EAGER_PROPAGATES = True
 # CORS
 # https://github.com/adamchainz/django-cors-headers
 # ------------------------------------------------------------------------------
-CORS_ALLOWED_ORIGINS = ["https://" + host for host in ALLOWED_HOSTS] + [
-    "http://" + host for host in ALLOWED_HOSTS
-]
+CORS_ALLOWED_ORIGINS = (
+    ["https://" + host for host in ALLOWED_HOSTS]
+    + ["http://" + host for host in ALLOWED_HOSTS]
+    # + [
+    #     "http://127.0.0.1:3019",
+    #     "http://localhost:3019",
+    # ]
+)
 CSRF_TRUSTED_ORIGINS = ["https://" + host for host in ALLOWED_HOSTS] + [
     "http://" + host for host in ALLOWED_HOSTS
 ]
