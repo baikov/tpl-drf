@@ -23,7 +23,7 @@ sphinx-autobuild==2021.3.14 # https://github.com/GaretJax/sphinx-autobuild
 # ------------------------------------------------------------------------------
 ruff==0.0.288  # https://github.com/astral-sh/ruff
 coverage==7.3.1  # https://github.com/nedbat/coveragepy
-black==23.7.0  # https://github.com/psf/black
+black==23.9.1  # https://github.com/psf/black
 pylint-django==2.5.3  # https://github.com/PyCQA/pylint-django
 pylint-celery==0.3  # https://github.com/PyCQA/pylint-celery
 pre-commit==3.4.0  # https://github.com/pre-commit/pre-commit
