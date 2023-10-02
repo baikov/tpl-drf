@@ -4,7 +4,7 @@ Werkzeug[watchdog]==2.3.7 # https://github.com/pallets/werkzeug
 ipdb==0.13.13  # https://github.com/gotcha/ipdb
 psycopg[c]==3.1.10  # https://github.com/psycopg/psycopg
 watchfiles==0.20.0  # https://github.com/samuelcolvin/watchfiles
-loguru==0.7.1
+loguru==0.7.2
 
 # Testing
 # ------------------------------------------------------------------------------
@@ -16,18 +16,18 @@ djangorestframework-stubs==3.14.2  # https://github.com/typeddjango/djangorestfr
 
 # Documentation
 # ------------------------------------------------------------------------------
-sphinx==7.2.5  # https://github.com/sphinx-doc/sphinx
+sphinx==7.2.6  # https://github.com/sphinx-doc/sphinx
 sphinx-autobuild==2021.3.14 # https://github.com/GaretJax/sphinx-autobuild
 
 # Code quality
 # ------------------------------------------------------------------------------
-ruff==0.0.288  # https://github.com/astral-sh/ruff
+ruff==0.0.290  # https://github.com/astral-sh/ruff
 coverage==7.3.1  # https://github.com/nedbat/coveragepy
-black==23.7.0  # https://github.com/psf/black
+black==23.9.1  # https://github.com/psf/black
 pylint-django==2.5.3  # https://github.com/PyCQA/pylint-django
 pylint-celery==0.3  # https://github.com/PyCQA/pylint-celery
 pre-commit==3.4.0  # https://github.com/pre-commit/pre-commit
-sentry-sdk==1.30.0  # https://github.com/getsentry/sentry-python
+sentry-sdk==1.31.0  # https://github.com/getsentry/sentry-python
 
 # Django
 # ------------------------------------------------------------------------------

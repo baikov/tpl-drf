@@ -59,6 +59,10 @@ updates:
     # Every weekday
     schedule:
       interval: 'daily'
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
 
   # Enable version updates for Python/Pip - Production
   - package-ecosystem: 'pip'

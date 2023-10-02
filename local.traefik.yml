@@ -8,7 +8,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=dev-proxy"
-      - "traefik.http.routers.django.rule=(Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)) && (PathPrefix(`/api`) || PathPrefix(`/${DJANGO_ADMIN_URL}`) || PathPrefix(`/static`) || PathPrefix(`/silk`))"
+      - "traefik.http.routers.django.rule=(Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)) && (PathPrefix(`/api`) || PathPrefix(`/${DJANGO_ADMIN_URL}`) || PathPrefix(`/static`) || PathPrefix(`/media`))"
       - "traefik.http.routers.django.priority=80"
       - "traefik.http.routers.django.entrypoints=web"
       - "traefik.http.routers.django.tls=false"
